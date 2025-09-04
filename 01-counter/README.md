@@ -15,3 +15,6 @@ Total marks for project: 20
 - Run simulation with existing test cases (add clock) - 10
 - Add extra test cases - 5
 
+## Solution
+
+[EDA Playground Link](https://www.edaplayground.com/x/ZwAM)

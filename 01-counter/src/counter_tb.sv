@@ -29,11 +29,12 @@ module counter_tb();
 
     // Clock generation
     initial begin
-        // Fill in code here
+        clk = 0;
+    	forever #5 clk = ~clk;
     end
-
+	
     // Instance of student's module
-    updown_counter dut(
+  updown_counter dut(.*
     );
 
     initial begin
@@ -54,7 +55,7 @@ module counter_tb();
         #10;
         load = 0;
         if (count !== 4'h7) begin
-            $display("Test 1 Failed: Load operation");
+          $display("Test 1 Failed: Load operation");
             test_passed = 1'b0;
         end
 
@@ -84,10 +85,32 @@ module counter_tb();
         end
 
         // Test Case 5: Reset during operation
-
+	  enable = 1;
+      #20
+      rst_n = 0;
+      @(posedge clk);
+      rst_n = 1;
+      if (count !== 4'h0) begin
+        $display("Test Case 5 Failed: Reset during operation");
+        test_passed = 1'b0;
+       end
+      
         // Test Case 6: Load while counting
+      	d_in = 4'h7;
+        load = 1;
+        @(posedge clk);
+        load = 0;
+        if (count !== 4'h7) begin
+          $display(" Test Case 6 Failed: Load while counting");
+            test_passed = 1'b0;
+        end
 
-        // Test Case 7: Disable while counting
+        // Test Case 7: Disable while countings
+      enable = 0;
+      if (count !== 4'h7) begin
+        $display("Test Case 7 Failed: Disable while counting");
+            test_passed = 1'b0;
+        end
 
         // Final check
         if (test_passed) begin

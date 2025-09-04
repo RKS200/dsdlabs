@@ -1,3 +1,4 @@
+`timescale 1ns / 1ps
 /**
 * updown_counter:
 * A simple up/down counter with load functionality.
@@ -19,7 +20,26 @@ module updown_counter(
     output logic [3:0] count // Counter output
 );
 
+    always_ff @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            // Asynchronous reset - counter goes to 0
+            count <= 4'b0000;
+        end
+        else if (load) begin
+            // Load operation has highest priority (after reset)
+            count <= d_in;
+        end
+        else if (enable) begin
+            // Counter is enabled, check direction
+            if (up_down) begin
+                // Count up
+                count <= count + 1'b1;
+            end
+            else begin
+                // Count down
+                count <= count - 1'b1;
+            end
+        end
+    end
 
 endmodule
-
-
